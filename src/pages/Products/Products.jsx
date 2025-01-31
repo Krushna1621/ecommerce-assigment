@@ -21,7 +21,7 @@ const Products = () => {
   }, []);
   return (
     <>
-      <Text m={50} fw={600}>
+      <Text m={50} fz={20} fw={900}>
         Product Listing page
       </Text>
       <Grid mx={50}>

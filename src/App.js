@@ -8,6 +8,9 @@ import CartPage from "./pages/Cart/CartPage";
 import Products from "./pages/Products/Products";
 import SignupPage from "./pages/SignUp/SignUp";
 import { GlobalPagesProvider } from "./pages/Context/Global.Context";
+import HomePage from "./pages/HomePage/HomePage";
+import Footer from "./components/Layout/Footer";
+import SingleProduct from "./pages/SinglePoduct/SingleProduct";
 const App = () => {
   const theme = createTheme({
     defaultRadius: "sm",
@@ -20,13 +23,15 @@ const App = () => {
         <NavBar />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LoginPage />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/products" element={<Products />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/products:id" element={<SingleProduct />} />
           </Routes>
         </BrowserRouter>
+        <Footer />
       </MantineProvider>
     </GlobalPagesProvider>
   );

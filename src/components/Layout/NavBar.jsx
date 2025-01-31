@@ -9,9 +9,13 @@ import {
 } from "@mantine/core";
 import { useState } from "react";
 import LogoImage from "../../assets/images/ecommerce-logo.jpg";
+import { IconShoppingCartFilled } from "@tabler/icons-react";
+import { useGlobalPagesContext } from "../../pages/Context/Global.Context";
 
 const NavBar = () => {
   const [opened, setOpened] = useState(false); // Track drawer visibility
+    const { cartItem } = useGlobalPagesContext();
+    const cartCount = cartItem.length;
 
   return (
     <>
@@ -37,13 +41,37 @@ const NavBar = () => {
           <Flex
             align={"center"}
             gap={10}
-            display={{ base: "none", md: "flex" }}>
+            display={{ base: "none", md: "flex" }}
+          >
             <Anchor href="/">Home</Anchor>
             <Anchor href="/products">Products</Anchor>
-            <Anchor href="/cart">Cart</Anchor>
+
             <Anchor href="/blogs">Blogs</Anchor>
             <Anchor href="/signup">SignUp</Anchor>
             <Anchor href="/login">Login</Anchor>
+            <Anchor href="/cart" style={{ position: "relative" }}>
+              <IconShoppingCartFilled />
+              {cartCount > 0 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    backgroundColor: "red",
+                    color: "white",
+                    borderRadius: "50%",
+                    width: "18px",
+                    height: "18px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "12px",
+                  }}
+                >
+                  {cartCount}
+                </div>
+              )}
+            </Anchor>
           </Flex>
         </Flex>
 
@@ -55,7 +83,8 @@ const NavBar = () => {
           size="100%"
           position="right"
           title="Navigation"
-          classNames={{ title: "drawer-title" }}>
+          classNames={{ title: "drawer-title" }}
+        >
           <Group direction="column" spacing="md" align="stretch">
             <Anchor href="/" onClick={() => setOpened(false)}>
               Home
@@ -64,10 +93,7 @@ const NavBar = () => {
               Products
             </Anchor>
             <Anchor href="/cart" onClick={() => setOpened(false)}>
-              Cart
-            </Anchor>
-            <Anchor href="/login" onClick={() => setOpened(false)}>
-              Blogs
+              <IconShoppingCartFilled />
             </Anchor>
             <Anchor href="/login" onClick={() => setOpened(false)}>
               SignUp

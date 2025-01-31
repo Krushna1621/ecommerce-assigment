@@ -5,6 +5,7 @@ import {
 import { createContext, use, useEffect, useState } from "react";
 import { auth } from "../../firebase/firebase";
 
+// Create the GlobalPagesContext
 const GlobalPagesContext = createContext({
   name: "Krushna",
   handleLoginSubmit: () => {},
@@ -14,27 +15,40 @@ const GlobalPagesContext = createContext({
   signUpError: null,
   cartItem: [],
   handleAddToCart: () => {},
+  handleRemoveFromCart: () => {},
+  user: null, // New state for storing user data
+  setUser: () => {}, // New function to set user data
 });
 
+// GlobalPagesProvider component
 export const GlobalPagesProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [signUpError, setSignUpError] = useState(null);
-
   const [cartItem, setCartItem] = useState([]);
+  const [user, setUser] = useState(null); // Store user info in context
+  const router = useRouter(); // Use Next.js router
 
-  //Login function
+  // Login function
   const handleLoginSubmit = async (values) => {
-    console.log(values);
     setError(null);
     try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      );
+      const loggedInUser = userCredential.user;
+      localStorage.setItem("user", JSON.stringify(loggedInUser));
+      setUser(loggedInUser); // Set the user in context
+    
       alert("Login successful!");
     } catch (err) {
       setError(err.message);
+      console.error("Error during login:", err);
     }
   };
 
-  //Signup function
+  // Signup function
   const handleSignupSubmit = async (values) => {
     setError(null);
     try {
@@ -45,15 +59,20 @@ export const GlobalPagesProvider = ({ children }) => {
     }
   };
 
+  // Add to cart function
   const handleAddToCart = ({ product }) => {
-    // Add product to the cart
     const updatedCart = [...cartItem, product];
-
-    // Update state and save to localStorage
     setCartItem(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
-
     console.log("Added to cart:", product);
+  };
+
+  // Remove from cart function
+  const handleRemoveFromCart = (productId) => {
+    const updatedCart = cartItem.filter((item) => item.id !== productId);
+    setCartItem(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    console.log("Removed from cart:", productId);
   };
 
   useEffect(() => {
@@ -61,26 +80,32 @@ export const GlobalPagesProvider = ({ children }) => {
     if (storedCart) {
       setCartItem(JSON.parse(storedCart));
     }
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser)); // Set user if already logged in
+    }
   }, []);
 
   return (
-    <>
-      <GlobalPagesContext.Provider
-        value={{
-          name: "Krushna",
-          handleLoginSubmit,
-          error,
-          setError,
-          handleSignupSubmit,
-          signUpError,
-          handleAddToCart,
-          cartItem,
-        }}>
-        {children}
-      </GlobalPagesContext.Provider>
-      ;
-    </>
+    <GlobalPagesContext.Provider
+      value={{
+        name: "Krushna",
+        handleLoginSubmit,
+        error,
+        setError,
+        handleSignupSubmit,
+        signUpError,
+        handleAddToCart,
+        handleRemoveFromCart,
+        cartItem,
+        user, // Pass user data to context
+        setUser, // Pass setUser function to context
+      }}
+    >
+      {children}
+    </GlobalPagesContext.Provider>
   );
 };
 
-export const useGlobalPagesContext = () => use(GlobalPagesContext);
+// Custom hook to use the GlobalPagesContext
+export const useGlobalPagesContext = () => useContext(GlobalPagesContext);
