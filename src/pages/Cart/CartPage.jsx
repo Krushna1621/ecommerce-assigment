@@ -1,12 +1,25 @@
 import { IconTrash } from "@tabler/icons-react";
 import { useGlobalPagesContext } from "../Context/Global.Context";
-import { Button, Card, Group, Image, Text, Stack, Badge, Flex } from "@mantine/core";
+import {
+  Button,
+  Card,
+  Group,
+  Image,
+  Text,
+  Stack,
+  Badge,
+  Flex,
+} from "@mantine/core";
 
 const CartPage = () => {
-  const { cartItem, handleRemoveFromCart } = useGlobalPagesContext();
+  const { cartItem, handleRemoveFromCart, user } = useGlobalPagesContext();
 
+  
+  // Calculate the total price of items in the cart
   const calculateTotal = () => {
-    return cartItem.reduce((acc, item) => acc + item.price, 0).toFixed(2);
+    return cartItem
+      .reduce((acc, item) => acc + item.product.price, 0) // Adjusted for nested `product`
+      .toFixed(2);
   };
 
   return (
@@ -17,10 +30,11 @@ const CartPage = () => {
       {cartItem.length > 0 ? (
         <>
           <Flex justify={"space-evenly"} mx={50}>
+            {/* Cart Items */}
             <Flex direction={"column"} gap={10} my={50}>
-              {cartItem.map((item) => (
+              {cartItem.map(({ product }) => (
                 <Card
-                  key={item.id}
+                  key={product.id}
                   shadow="sm"
                   padding="lg"
                   radius="md"
@@ -29,24 +43,24 @@ const CartPage = () => {
                   <Group position="apart" align="flex-start">
                     <Group>
                       <Image
-                        src={item.image}
-                        alt={item.title}
+                        src={product.image}
+                        alt={product.title}
                         width={80}
                         height={80}
                         radius="md"
                       />
                       <Stack spacing={4}>
                         <Text weight={600} size="md">
-                          {item.title}
+                          {product.title}
                         </Text>
-                        <Badge color="blue">${item.price}</Badge>
+                        <Badge color="blue">${product.price}</Badge>
                       </Stack>
                     </Group>
                     <Button
                       variant="outline"
                       color="red"
                       size="xs"
-                      onClick={() => handleRemoveFromCart(item.id)}
+                      onClick={() => handleRemoveFromCart(product.id)}
                     >
                       <IconTrash />
                     </Button>
@@ -54,6 +68,8 @@ const CartPage = () => {
                 </Card>
               ))}
             </Flex>
+
+            {/* Total and Checkout Section */}
             <Flex my={50}>
               <Card>
                 <Group position="apart">
@@ -80,7 +96,7 @@ const CartPage = () => {
         </>
       ) : (
         <Flex h={"500px"} justify="center" align="center">
-          <Text align="center" size="lg" weight={500} >
+          <Text align="center" size="lg" weight={500}>
             Your cart is empty.
           </Text>
         </Flex>

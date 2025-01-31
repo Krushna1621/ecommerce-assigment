@@ -9,9 +9,13 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useGlobalPagesContext } from "../Context/Global.Context";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const SignupPage = () => {
-  const { handleSignupSubmit, signUpError } = useGlobalPagesContext();
+
+  const navigate = useNavigate();
+  const { handleSignupSubmit, signUpError, user } = useGlobalPagesContext();
   const form = useForm({
     initialValues: {
       email: "",
@@ -26,6 +30,13 @@ const SignupPage = () => {
         value === values.password ? null : "Passwords do not match",
     },
   });
+
+  useEffect(() => {
+      if (user?.email) {
+        // Prevent logged-in users from accessing login or signup pages
+        navigate("/"); // Redirect to homepage if trying to visit login or signup pages
+      }
+    }, [user?.email, navigate]);
 
   return (
     <Container size={420} my={40}>

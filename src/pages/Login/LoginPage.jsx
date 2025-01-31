@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   TextInput,
@@ -10,9 +10,11 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useGlobalPagesContext } from "../Context/Global.Context";
+import { useNavigate } from "react-router";
 
 const LoginPage = () => {
-  const { handleLoginSubmit, error } = useGlobalPagesContext();
+  const navigate = useNavigate();
+  const { handleLoginSubmit, error,user } = useGlobalPagesContext();
   const form = useForm({
     initialValues: {
       email: "",
@@ -24,6 +26,13 @@ const LoginPage = () => {
         value.length >= 6 ? null : "Password must be at least 6 characters",
     },
   });
+  
+  useEffect(() => {
+    if (user?.email) {
+      // Prevent logged-in users from accessing login or signup pages
+      navigate("/"); // Redirect to homepage if trying to visit login or signup pages
+    }
+  }, [user?.email, navigate]);
 
   return (
     <Container size={420} my={40}>

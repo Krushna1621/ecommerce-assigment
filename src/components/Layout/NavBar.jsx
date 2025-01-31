@@ -6,16 +6,27 @@ import {
   Burger,
   Drawer,
   Group,
+  Menu,
+  MenuItem,
+  Box,
 } from "@mantine/core";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LogoImage from "../../assets/images/ecommerce-logo.jpg";
 import { IconShoppingCartFilled } from "@tabler/icons-react";
 import { useGlobalPagesContext } from "../../pages/Context/Global.Context";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const [opened, setOpened] = useState(false); // Track drawer visibility
-    const { cartItem } = useGlobalPagesContext();
-    const cartCount = cartItem.length;
+  const { cartItem, user } = useGlobalPagesContext();
+  const cartCount = cartItem.length;
+  const navigate = useNavigate(); // Hook to navigate to other pages
+
+  const handleLogout = () => {
+    localStorage.clear(); // Clear localStorage
+    window.location.reload(); // Reload the page
+    navigate("/"); // Redirect to homepage
+  };
 
   return (
     <>
@@ -28,6 +39,7 @@ const NavBar = () => {
           </Anchor>
 
           {/* Burger menu for mobile */}
+
           <Burger
             display={{ base: "block", md: "none" }}
             opened={opened}
@@ -46,9 +58,30 @@ const NavBar = () => {
             <Anchor href="/">Home</Anchor>
             <Anchor href="/products">Products</Anchor>
 
-            <Anchor href="/blogs">Blogs</Anchor>
-            <Anchor href="/signup">SignUp</Anchor>
-            <Anchor href="/login">Login</Anchor>
+            {/* Conditionally render SignUp/Login or user email */}
+            {!user?.email ? (
+              <>
+                <Anchor href="/signup">SignUp</Anchor>
+                <Anchor href="/login">Login</Anchor>
+              </>
+            ) : (
+              // Display user email as a clickable div/span
+              <Menu
+                width={200}
+                position="bottom-end"
+                transition="pop-top-right"
+              >
+                <Menu.Target>
+                  <div style={{ cursor: "pointer" }}>{user.email}</div>
+                </Menu.Target>
+
+                <Menu.Dropdown>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                </Menu.Dropdown>
+              </Menu>
+            )}
+
+            {/* Cart */}
             <Anchor href="/cart" style={{ position: "relative" }}>
               <IconShoppingCartFilled />
               {cartCount > 0 && (
@@ -82,24 +115,52 @@ const NavBar = () => {
           padding="xl"
           size="100%"
           position="right"
-          title="Navigation"
           classNames={{ title: "drawer-title" }}
         >
-          <Group direction="column" spacing="md" align="stretch">
+          <Flex direction="column" gap="md">
             <Anchor href="/" onClick={() => setOpened(false)}>
               Home
             </Anchor>
             <Anchor href="/products" onClick={() => setOpened(false)}>
               Products
             </Anchor>
-            <Anchor href="/cart" onClick={() => setOpened(false)}>
+
+            {!user?.email ? (
+              <>
+                <Anchor href="/signup" onClick={() => setOpened(false)}>
+                  SignUp
+                </Anchor>
+                <Anchor href="/login" onClick={() => setOpened(false)}>
+                  Login
+                </Anchor>
+              </>
+            ) : (
+              <Anchor onClick={() => setOpened(false)}>{user.email}</Anchor>
+            )}
+            <Anchor href="/cart" style={{ position: "relative" }}>
               <IconShoppingCartFilled />
+              {cartCount > 0 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    backgroundColor: "red",
+                    color: "white",
+                    borderRadius: "50%",
+                    width: "18px",
+                    height: "18px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "12px",
+                  }}
+                >
+                  {cartCount}
+                </div>
+              )}
             </Anchor>
-            <Anchor href="/login" onClick={() => setOpened(false)}>
-              SignUp
-            </Anchor>
-            <Anchor onClick={() => setOpened(false)}>Login</Anchor>
-          </Group>
+          </Flex>
         </Drawer>
 
         <Divider my="lg" />
