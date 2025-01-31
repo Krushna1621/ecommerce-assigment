@@ -29,9 +29,9 @@ const CartPage = () => {
       </Text>
       {cartItem.length > 0 ? (
         <>
-          <Flex justify={"space-evenly"} mx={50}>
+          <Flex direction={{ base: "column", md: "row" }} justify={"space-evenly"} mx={50}>
             {/* Cart Items */}
-            <Flex direction={"column"} gap={10} my={50}>
+            <Flex direction={"column"} gap={10} my={{ base: 10, md: 50 }}>
               {cartItem.map(({ product }) => (
                 <Card
                   key={product.id}
