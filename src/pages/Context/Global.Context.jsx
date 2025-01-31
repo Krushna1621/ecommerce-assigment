@@ -26,7 +26,7 @@ export const GlobalPagesProvider = ({ children }) => {
   const [signUpError, setSignUpError] = useState(null);
   const [cartItem, setCartItem] = useState([]);
   const [user, setUser] = useState(null); // Store user info in context
-  const router = useRouter(); // Use Next.js router
+
 
   // Login function
   const handleLoginSubmit = async (values) => {
