@@ -20,18 +20,17 @@ const Footer = () => {
           gap="lg"
         >
           {/* Logo/Brand */}
-          <Image src={LogoImage} alt="logo" w={300} h={100} />
+          <a href="/">
+            <Image src={LogoImage} alt="logo" w={300} h={100} />
+          </a>
 
           {/* Links */}
           <Group spacing="xl" direction={{ base: "column", sm: "row" }}>
-            <Anchor href="/about" size="sm" color="dimmed">
-              About Us
+            <Anchor href="/products" size="sm" color="dimmed">
+              Products
             </Anchor>
-            <Anchor href="/services" size="sm" color="dimmed">
-              Services
-            </Anchor>
-            <Anchor href="/contact" size="sm" color="dimmed">
-              Contact
+            <Anchor href="/cart" size="sm" color="dimmed">
+              Cart
             </Anchor>
           </Group>
 

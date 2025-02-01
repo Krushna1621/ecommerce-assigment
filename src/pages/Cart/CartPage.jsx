@@ -10,11 +10,13 @@ import {
   Badge,
   Flex,
 } from "@mantine/core";
+import { useNavigate } from "react-router";
+
 
 const CartPage = () => {
   const { cartItem, handleRemoveFromCart, user } = useGlobalPagesContext();
+   const navigate = useNavigate();
 
-  
   // Calculate the total price of items in the cart
   const calculateTotal = () => {
     return cartItem
@@ -22,14 +24,27 @@ const CartPage = () => {
       .toFixed(2);
   };
 
+  // Handle checkout button click
+  const handleCheckout = () => {
+    if (!user.email) {
+      navigate("/login");
+    } else {
+      navigate("/thank-you");
+    }
+  };
+
   return (
-    <Stack spacing="md">
+    <Stack spacing="md" my={50}>
       <Text size="xl" weight={700} align="center">
         Cart
       </Text>
       {cartItem.length > 0 ? (
         <>
-          <Flex direction={{ base: "column", md: "row" }} justify={"space-evenly"} mx={50}>
+          <Flex
+            direction={{ base: "column", md: "row" }}
+            justify={"space-evenly"}
+            mx={50}
+          >
             {/* Cart Items */}
             <Flex direction={"column"} gap={10} my={{ base: 10, md: 50 }}>
               {cartItem.map(({ product }) => (
@@ -86,9 +101,10 @@ const CartPage = () => {
                   size="md"
                   radius="md"
                   color="blue"
-                  onClick={() => alert("Proceeding to checkout...")}
+                  disabled={!user.email} // Disable button if user is not logged in
+                  onClick={handleCheckout} // Handle click event
                 >
-                  Proceed to Checkout
+                  {user.email ? "Proceed to Checkout" : "Login to Checkout"}
                 </Button>
               </Card>
             </Flex>

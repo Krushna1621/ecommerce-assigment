@@ -11,6 +11,7 @@ import { GlobalPagesProvider } from "./pages/Context/Global.Context";
 import HomePage from "./pages/HomePage/HomePage";
 import Footer from "./components/Layout/Footer";
 import SingleProduct from "./pages/SinglePoduct/SingleProduct";
+import ThankYouPage from "./pages/ThankYou/ThankYou";
 const App = () => {
   const theme = createTheme({
     defaultRadius: "sm",
@@ -29,6 +30,7 @@ const App = () => {
             <Route path="/products" element={<Products />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/products/:id" element={<SingleProduct />} />
+            <Route path="/thank-you" element={<ThankYouPage/>} />
           </Routes>
        
         <Footer />
