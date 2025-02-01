@@ -30,7 +30,7 @@ const NavBar = () => {
   return (
     <>
       <header>
-        <Flex align={"center"} justify={"space-between"} px={100} h={100} bg={"#f8f9fa"}>
+        <Flex align={"center"} justify={"space-between"} px={{ base: 30, md: 100 }} h={100} bg={"#f8f9fa"}>
           <Anchor href="/">
             <Flex>
               <Image src={LogoImage} alt="logo" w={300} h={50} />

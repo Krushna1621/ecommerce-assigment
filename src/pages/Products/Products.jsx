@@ -53,7 +53,7 @@ const Products = () => {
       <Flex
         bg={"orange"}
         mb={20}
-        direction={{ base: "row", md: "column" }}
+        direction={{ base: "column", md: "column" }}
         px={50}
         py={20}
         gap={10}
@@ -61,8 +61,12 @@ const Products = () => {
         <Text fz={20} fw={900}>
           Product Listing Page
         </Text>
-        <Flex justify={"space-between"}>
-          <Flex direction={"column"}>
+        <Flex
+          gap={10}
+          justify={"space-between"}
+          direction={{ base: "column", md: "row" }}
+        >
+          <Flex direction={{ base: "column", md: "column" }}>
             <Text>Filters:</Text>
             <Select
               data={[
