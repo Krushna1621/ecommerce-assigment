@@ -23,14 +23,26 @@ const NavBar = () => {
   const navigate = useNavigate(); // Hook to navigate to other pages
 
   const handleLogout = () => {
-    localStorage.clear(); // Clear localStorage
-    window.location.reload(); // Reload the page
-    navigate("/"); // Redirect to homepage
+    localStorage.clear();
+    window.location.reload();
+    navigate("/");
   };
+  const handleCartClick = () => {
+    // Navigate to the cart page
+    navigate("/cart");
+    setOpened(false);
+  };
+
   return (
     <>
       <header>
-        <Flex align={"center"} justify={"space-between"} px={{ base: 30, md: 100 }} h={100} bg={"#f8f9fa"}>
+        <Flex
+          align={"center"}
+          justify={"space-between"}
+          px={{ base: 30, md: 100 }}
+          h={100}
+          bg={"#f8f9fa"}
+        >
           <Anchor href="/">
             <Flex>
               <Image src={LogoImage} alt="logo" w={300} h={50} />
@@ -38,7 +50,6 @@ const NavBar = () => {
           </Anchor>
 
           {/* Burger menu for mobile */}
-
           <Burger
             display={{ base: "block", md: "none" }}
             opened={opened}
@@ -116,27 +127,12 @@ const NavBar = () => {
           position="right"
           classNames={{ title: "drawer-title" }}
         >
+          {/* Cart in mobile drawer, placed between the Burger and Logo */}
           <Flex direction="column" gap="md">
-            <Anchor href="/" onClick={() => setOpened(false)}>
-              Home
-            </Anchor>
-            <Anchor href="/products" onClick={() => setOpened(false)}>
-              Products
-            </Anchor>
-
-            {!user?.email ? (
-              <>
-                <Anchor href="/signup" onClick={() => setOpened(false)}>
-                  SignUp
-                </Anchor>
-                <Anchor href="/login" onClick={() => setOpened(false)}>
-                  Login
-                </Anchor>
-              </>
-            ) : (
-              <Anchor onClick={() => setOpened(false)}>{user.email}</Anchor>
-            )}
-            <Anchor href="/cart" style={{ position: "relative" }}>
+            <Anchor
+              onClick={handleCartClick}
+              style={{ position: "relative", cursor: "pointer" }}
+            >
               <IconShoppingCartFilled />
               {cartCount > 0 && (
                 <div
@@ -159,6 +155,26 @@ const NavBar = () => {
                 </div>
               )}
             </Anchor>
+
+            <Anchor href="/" onClick={() => setOpened(false)}>
+              Home
+            </Anchor>
+            <Anchor href="/products" onClick={() => setOpened(false)}>
+              Products
+            </Anchor>
+
+            {!user?.email ? (
+              <>
+                <Anchor href="/signup" onClick={() => setOpened(false)}>
+                  SignUp
+                </Anchor>
+                <Anchor href="/login" onClick={() => setOpened(false)}>
+                  Login
+                </Anchor>
+              </>
+            ) : (
+              <Anchor onClick={() => setOpened(false)}>{user.email}</Anchor>
+            )}
           </Flex>
         </Drawer>
 
