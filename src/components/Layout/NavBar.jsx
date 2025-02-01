@@ -11,7 +11,7 @@ import {
   Box,
 } from "@mantine/core";
 import { useState, useEffect } from "react";
-import LogoImage from "../../assets/images/ecommerce-logo.jpg";
+import LogoImage from "../../assets/images/ecommerce-logo.png";
 import { IconShoppingCartFilled } from "@tabler/icons-react";
 import { useGlobalPagesContext } from "../../pages/Context/Global.Context";
 import { useNavigate } from "react-router-dom";
@@ -27,11 +27,10 @@ const NavBar = () => {
     window.location.reload(); // Reload the page
     navigate("/"); // Redirect to homepage
   };
-
   return (
     <>
       <header>
-        <Flex align={"center"} justify={"space-between"} mx={40}>
+        <Flex align={"center"} justify={"space-between"} px={100} h={100} bg={"#f8f9fa"}>
           <Anchor href="/">
             <Flex>
               <Image src={LogoImage} alt="logo" w={300} h={50} />
@@ -163,7 +162,7 @@ const NavBar = () => {
           </Flex>
         </Drawer>
 
-        <Divider my="lg" />
+        <Divider />
       </header>
     </>
   );

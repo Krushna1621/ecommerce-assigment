@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Flex, Text, Group, Anchor, Image } from "@mantine/core";
-import LogoImage from "../../assets/images/ecommerce-logo.jpg";
+import LogoImage from "../../assets/images/ecommerce-logo.png";
 import {
   IconBrandFacebook,
   IconBrandTwitter,
